@@ -11,11 +11,9 @@ from typing import Dict
 import pandas as pd
 
 from .file_paths import JHU_CSSE_FILE_PATHS
-from .helper import (CleaningHelper,
+from .helper import (helper_df_cleaning, helper_df_cols_cleaning,
                      helper_get_latest_data_url)
 
-# Initiate helper class for data preprocessing
-CLEANING_HELPER = CleaningHelper()
 
 # Get Lookup table
 def get_data_lookup_table() -> Dict[str, str]:
@@ -44,7 +42,7 @@ class DailyReports:
 
         # Data pre-processing
         concerned_columns = ['Confirmed', 'Deaths', 'Recovered', 'Active']
-        df = CLEANING_HELPER.helper_df_cols_cleaning(df, concerned_columns, int)
+        df = helper_df_cols_cleaning(df, concerned_columns, int)
         
         return df
 
@@ -71,10 +69,10 @@ class TimeSeries:
 
             # Extract data
             df = pd.read_csv(url)
-            df = CLEANING_HELPER.helper_df_cleaning(df)
+            df = helper_df_cleaning(df)
             if US is True:
                 concerned_columns = ['Lat', 'Long_']
-                df = CLEANING_HELPER.helper_df_cols_cleaning(df, concerned_columns, float)
+                df = helper_df_cols_cleaning(df, concerned_columns, float)
             dataframes[category] = df
 
         return dataframes
